@@ -1,18 +1,20 @@
+what does this code do?
+
+- intend to draw a polyhedron of given number of vertices. Each vertex of the polyhedron is assumed to be a point charge, intially dispersed randomly over a unit radius sphere,forces & energy on each of the chagre is computed, and each of the charge is iteratively moved by small angles along the dir of the force vector, (if the change reduces the overall energy of the system).
+
 requirements:
 PyQt4, OpenGL, numpy, scipy
 
-to run, 
-python poly.py
+how to run?
+>python poly.py
 
-to change the number of vertices and/or iterations 
-in ln 120 of poly.py change x in
-mainwindow.mCarlo(x,n) #n corresponds to the number of runs.
-
+to change the number of vertices(x) and/or iterations(n) 
+in ln 120 of poly.py change x,n in
+mainwindow.mCarlo(x,n) 
 
 To Do:
 1) correct the algorithm, to always ensure it reaches the global maximum
 2) algorithm to draw edges and hence faces
-
 
 Credits:
 this is based on, http://www.wmeadow.demon.co.uk/poly/index.htm
