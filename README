@@ -1,0 +1,21 @@
+requirements:
+PyQt4, OpenGL, numpy, scipy
+
+to run, 
+python poly.py
+
+to change the number of vertices and/or iterations 
+in ln 120 of poly.py change x in
+mainwindow.mCarlo(x,n) #n corresponds to the number of runs.
+
+
+To Do:
+1) correct the algorithm, to always ensure it reaches the global maximum
+2) algorithm to draw edges and hence faces
+
+
+Credits:
+this is based on, http://www.wmeadow.demon.co.uk/poly/index.htm
+
+By:
+chaitanya ch

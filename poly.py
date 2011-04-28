@@ -117,6 +117,6 @@ class poly(object):
 		
 app = QtGui.QApplication(sys.argv)
 mainWindow = poly()
-mainWindow.mCarlo(20,500)
+mainWindow.mCarlo(5,500)
 sys.exit(app.exec_())
 
