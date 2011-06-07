@@ -1,14 +1,15 @@
-from numpy import math,sqrt,fabs,sin,cos
+from numpy import math,sqrt,arccos,fabs,sin,cos
 from scipy import random#, randint
 from updatepaintGL import *
 
 class poly(object):
-	def __init__(self,parent=None):
+	def __init__(self,v=4,n=500):
 		self.window = GLWidget()
 		#self.window.translate([0.0, 0.0, 100.0])
 		self.window.show()
-		#self.mCarlo(20,100)
-		
+#		self.mCarlo(v,n)
+ 		self.forceAngleOutward(v,n)
+
 	def distanceSqr(self,a,b=[0,0,0]):
 		return (a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2
 	
@@ -75,48 +76,105 @@ class poly(object):
 		c[1] = a[0]*(b[1]*b[0]*(1-cT)+b[2]*sT) + a[1]*(cT+(1-cT)*b[1]**2) + a[2]*(b[1]*b[2]*(1-cT)-b[0]*sT)
 		c[2] = a[0]*(b[2]*b[0]*(1-cT)-b[1]*sT) + a[1]*(b[2]*b[1]*(1-cT)+b[0]*sT) + a[2]*(cT+(1-cT)*b[2]**2)
 		return c
-	
+
+	def drawEdges(self,p):
+		for i in range(0,len(p)):
+			leni=[]
+			for j in range(0,len(p)):
+				if j!=i:
+					leni.append(self.distance(p[i],p[j]))
+				else:
+					leni.append(2)
+			minLenDist = min(leni)
+			upperCutDist = 1.3*minLenDist
+
+			for cv in range(0,len(leni)):
+				if leni[cv]<=upperCutDist:
+					if cv!=i:
+			#			print 'hello'
+						self.window.drawLines(p[cv],p[i])
+					#minLenIndex[i].append(cv) #index of point that is least distance.
+						
+        def forceAngleOutward(self,n_pts,runs=100):
+		p = self.disperseRand(n_pts)
+		f,eOld = self.forceVectors(p)
+		count = 0
+		number = [len(p)*runs]
+		randIndxs = random.randint(0,len(p),[len(p)*runs])
+		for r in range(0,runs):
+     			for i in range(0,len(p)):
+			#for q in range(0,len(p)):
+					#print q*(r+1)
+			#	i = randIndxs[q*(r+1)]	
+					#print i
+				magnitude = self.distance(f[i])			
+				dirForce = [f[i][0]/magnitude,f[i][1]/magnitude,f[i][2]/magnitude]
+
+				angle = arccos((p[i][0]*dirForce[0])+(p[i][1]*dirForce[1])+(p[i][2]*dirForce[2]))
+				if angle>0.01:
+					p[i] = dirForce
+					count +=1
+					
+				self.window.update(p)
+				self.window.updateGL()
+				self.window.show()
+				self.window.raise_()
+			
+				f,e = self.forceVectors(p)			
+				#print eOld,count
+
+			print angle, e	
+			self.window.lines=[]
+			self.drawEdges(p)
+		print count
+
+
 	def mCarlo(self,n_pts,runs=100):
 		p = self.disperseRand(n_pts)
 		#eOld = energySystem(p)
 		f,eOld = self.forceVectors(p)
 		count = 0
-		angle = 0.3
+		angle = 1.0
 		number = [len(p)*runs]
 		randIndxs = random.randint(0,len(p),[len(p)*runs])
 #		print len(randIndxs)
-		for r in range(0,runs):
-			
-			#for i in range(0,len(p)):
-			for q in range(0,len(p)):
-				#print q*(r+1)
-				i = randIndxs[q*(r+1)]	
-				#print i
-				magnitude = self.distance(f[i])			
-				dirForce = [f[i][0]/magnitude,f[i][1]/magnitude,f[i][2]/magnitude]
+		while angle > 0.01 :
+			for r in range(0,runs):
 				
-				pOld = p[i]
-				p[i] = self.rotateBy(p[i],dirForce,angle)
+				#for i in range(0,len(p)):
+				for q in range(0,len(p)):
+					#print q*(r+1)
+					i = randIndxs[q*(r+1)]	
+					#print i
+					magnitude = self.distance(f[i])			
+					dirForce = [f[i][0]/magnitude,f[i][1]/magnitude,f[i][2]/magnitude]
+					nangle = angle/sqrt(count+1)
+					pOld = p[i]
+					p[i] = self.rotateBy(p[i],dirForce,-1*angle)
+					
+					eNew = self.energySystem(p)
+					
+					if eNew > eOld:	#revert back
+						p[i] = pOld
+						count +=1
+					else:
+						eOld = eNew
 				
-				eNew = self.energySystem(p)
-				
-				if eNew > eOld:	#revert back
-					p[i] = pOld
-					count +=1
-				else:
-					eOld = eNew
+				self.window.update(p)
+				self.window.updateGL()
+				self.window.show()
+				self.window.raise_()
 			
-			self.window.update(p)
-			self.window.updateGL()
-			self.window.show()
-			self.window.raise_()
-			
-			f,e = self.forceVectors(p)			
-			print eOld,count		
+				f,e = self.forceVectors(p)			
+				#print eOld,count
+			angle = angle / 2
+			print angle, eOld	
+			self.window.lines=[]
+			self.drawEdges(p)
 		print count
-		
+
 app = QtGui.QApplication(sys.argv)
-mainWindow = poly()
-mainWindow.mCarlo(5,500)
+mainWindow = poly(14,100)
+#mainWindow.mCarlo(8,500)
 sys.exit(app.exec_())
 

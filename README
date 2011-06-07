@@ -2,6 +2,10 @@ what does this code do?
 
 - intend to draw a polyhedron of given number of vertices. Each vertex of the polyhedron is assumed to be a point charge, intially dispersed randomly over a unit radius sphere,forces & energy on each of the chagre is computed, and each of the charge is iteratively moved by small angles along the dir of the force vector, (if the change reduces the overall energy of the system).
 
+Edit, 7th June: (change of algorithm)
+- places the charges in the direction of the force acting upon them. Not accounting for energy at all.
+- also draws edges instead of displaying the points itself.
+
 requirements:
 PyQt4, OpenGL, numpy, scipy
 

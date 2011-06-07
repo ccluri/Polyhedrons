@@ -90,7 +90,7 @@ class PyGLWidget(QtOpenGL.QGLWidget):
 	#additions by chaitanya
 	
 	self.location=[]
-	
+	self.lines=[]
     @QtCore.pyqtSlot()
     def printModelViewMatrix(self):
         print self.modelview_matrix_
@@ -113,7 +113,7 @@ class PyGLWidget(QtOpenGL.QGLWidget):
 
         glMatrixMode(GL_MODELVIEW)
         glLoadMatrixd(self.modelview_matrix_)
-	self.renderAxis()
+#	self.renderAxis()
 
     def set_projection(self, _near, _far, _fovy):
         self.near_ = _near
@@ -392,7 +392,7 @@ class PyGLWidget(QtOpenGL.QGLWidget):
 	"""
 	# XYZ axis
 	glLineWidth(1)
-	glDisable(GL_LIGHTING)
+#	glDisable(GL_LIGHTING)
 	glBegin(GL_LINES)
 	glColor(1, 0, 0)	#Xaxis, Red color
 	glVertex3f(0, 0, 0)
@@ -404,7 +404,7 @@ class PyGLWidget(QtOpenGL.QGLWidget):
 	glVertex3f(0, 0, 0)
 	glVertex3f(0, 0, 2)
 	glEnd()
-	glEnable(GL_LIGHTING)
+#	glEnable(GL_LIGHTING)
 	glLineWidth(1)	
 
     
